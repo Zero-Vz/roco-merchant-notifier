@@ -1,0 +1,28 @@
+name: Roco Merchant Notifier
+
+on:
+  schedule:
+    # GitHub 使用的是 UTC 时间。
+    # 远行商人每天北京时间 08:00, 12:00, 16:00, 20:00 刷新。
+    # 减去 8 小时对应 UTC 时间：00:00, 04:00, 08:00, 12:00。
+    # 设定在刷新时间的后 2 分钟执行 (02分)，确保官方数据已更新。
+    - cron: '2 0,4,8,12 * * *'
+  workflow_dispatch: # 允许手动点击运行，方便随时测试
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Requests Library
+        run: pip install requests
+
+      - name: Run Notifier Script
+        run: python main.py
