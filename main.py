@@ -1,3 +1,4 @@
+import os
 import requests
 
 # 洛克王国数据网关 (熵增项目组端点)
