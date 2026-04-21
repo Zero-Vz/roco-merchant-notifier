@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>远行商人</title>
     <style>
+/* 替换为云端字体直链，确保渲染时有原版字体 */
 @font-face {
     font-family: "fzlant";
-    src: url("{{_res_path}}ttf/fzlant.D5FI9Et0.ttf");
+    src: url("https://raw.githubusercontent.com/Entropy-Increase-Team/astrbot_plugin_rocom/main/render/yuanxing-shangren/ttf/fzlant.D5FI9Et0.ttf");
 }
 
 @font-face {
     font-family: "dundun";
-    src: url("{{_res_path}}ttf/dundun.xHd_Ee5-.woff2");
+    src: url("https://raw.githubusercontent.com/Entropy-Increase-Team/astrbot_plugin_rocom/main/render/yuanxing-shangren/ttf/dundun.xHd_Ee5-.woff2");
 }
 
 * {
@@ -42,6 +43,7 @@ body {
     background: #ece3d3;
 }
 
+/* 添加了 roco-merchant，兼容 Python 的精准切割截图 */
 .merchant-page {
     position: relative;
     width: min(820px, 100%);
@@ -318,18 +320,14 @@ body {
     </style>
 </head>
 <body>
-    <div class="merchant-page">
-        <div class="background" style="background-image: url('{{background}}');"></div>
+    <div class="merchant-page roco-merchant">
+        <div class="background" style="background-image: url('https://raw.githubusercontent.com/Entropy-Increase-Team/astrbot_plugin_rocom/main/render/yuanxing-shangren/img/bg.C8CUoi7I.jpg');"></div>
         <div class="content-container">
             <div class="header">
                 <div class="title-section">
                     <div class="title-main">
                         <div class="title-badge">
-                            {% if titleIcon %}
-                            <img src="{{_res_path}}img/yuanxingshangren.png" alt="{{title}}">
-                            {% else %}
-                            远
-                            {% endif %}
+                            <img src="https://raw.githubusercontent.com/Entropy-Increase-Team/astrbot_plugin_rocom/main/img/yuanxingshangren.png" alt="{{title}}">
                         </div>
                         <span class="title-text">{{title}}</span>
                     </div>
