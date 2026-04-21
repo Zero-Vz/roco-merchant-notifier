@@ -2,8 +2,6 @@ name: Roco Merchant Notifier
 
 on:
   schedule:
-    # 北京时间 08:00, 12:00, 16:00, 20:00 刷新
-    # 提前 5 分钟进入排队队列，对抗 GitHub 延迟
     - cron: '55 23,3,7,11 * * *'
   workflow_dispatch: 
 
@@ -27,6 +25,8 @@ jobs:
       - name: Install Playwright Browsers & OS Dependencies
         run: |
           playwright install chromium --with-deps
+          # 核心修复 2：在云端服务器安装中文字体包，作为最强力的防排版错乱兜底！
+          sudo apt-get install -y fonts-wqy-zenhei
 
       - name: Run Notifier Script
         env:
