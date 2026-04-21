@@ -3,16 +3,16 @@ import requests
 # 洛克王国数据网关 (熵增项目组端点)
 API_URL = "https://wegame.shallow.ink/api/v1/games/rocom/merchant/info?refresh=true"
 
-# ！！！1. 在此填入你从项目方申请到的 API Key ！！！
-ROCOM_API_KEY = "sk-ff14f964051a5c966564e29b5bd3a768"
-
-# ！！！2. 在此填入你 NotifyMe 设备的真实 UUID ！！！
-NOTIFYME_UUID = "jk9JwjyvKZ8FL75eei4c3Z"
+ROCOM_API_KEY = os.environ.get("ROCOM_API_KEY")
+NOTIFYME_UUID = os.environ.get("NOTIFYME_UUID")
 
 # 新版 NotifyMe 官方服务端地址
 NOTIFYME_SERVER_URL = "https://notifyme-server.wzn556.top/api/send"
 
 def get_merchant_data():
+    if not ROCOM_API_KEY:
+        return None, "错误：未检测到 ROCOM_API_KEY 环境变量"
+        
     try:
         # 这里的 headers 就是出示通行证的关键！
         headers = {
