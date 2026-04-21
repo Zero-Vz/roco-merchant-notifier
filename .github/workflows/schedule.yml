@@ -29,4 +29,5 @@ jobs:
           # 从 GitHub Secrets 中读取并映射为环境变量
           ROCOM_API_KEY: ${{ secrets.ROCOM_API_KEY }}
           NOTIFYME_UUID: ${{ secrets.NOTIFYME_UUID }}
+          BARK_KEY: ${{ secrets.BARK_KEY }}
         run: python main.py
