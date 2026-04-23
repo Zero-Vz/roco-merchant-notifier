@@ -192,17 +192,21 @@ def push_all(title, body, markdown, image_url):
         except: pass
 
     # PushPlus 支持，需先设置 PUSHPLUS_TOKEN
-    if PUSHPLUS_TOKEN:
-        pushplus_data = {
-            "token": PUSHPLUS_TOKEN,
-            "title": title,
-            "content": markdown if markdown else body,
-            "template": "markdown"
-        }
-        try:
-            requests.post('http://www.pushplus.plus/send', json=pushplus_data, timeout=10)
-            print("✅ PushPlus 推送已发送")
-        except: pass
+if PUSHPLUS_TOKEN:
+    content = (
+        f"{markdown}\n\n![]({image_url})"
+        if image_url else (markdown if markdown else body)
+    )
+    pushplus_data = {
+        "token": PUSHPLUS_TOKEN,
+        "title": title,
+        "content": content,
+        "template": "markdown"
+    }
+    try:
+        requests.post('http://www.pushplus.plus/send', json=pushplus_data, timeout=10)
+        print("✅ PushPlus 推送已发送")
+    except: pass
 
 # ================= 5. 主入口 =================
 
