@@ -167,13 +167,18 @@ async def upload_to_imgbb(image_path):
 # ================= 4. 推送分发 =================
 
 def push_all(title, body, markdown, image_url):
-    """执行双通道推送"""
+    """执行多通道推送：NotifyMe、Bark、PushPlus"""
+    # NotifyMe 推送
     if NOTIFYME_UUID:
         payload = {
             "data": {
                 "uuid": NOTIFYME_UUID, "ttl": 86400, "priority": "high",
                 "data": {
-                    "title": title, "body": body, "group": "洛克王国", "bigText": True, "record": 1,
+                    "title": title,
+                    "body": body,
+                    "group": "洛克王国",
+                    "bigText": True,
+                    "record": 1,
                     "markdown": f"{markdown}\n\n![render]({image_url})" if image_url else markdown
                 }
             }
@@ -181,32 +186,50 @@ def push_all(title, body, markdown, image_url):
         try:
             requests.post(NOTIFYME_SERVER, json=payload, timeout=10)
             print("✅ NotifyMe 推送已发送")
-        except: pass
-    
+        except Exception as e:
+            print(f"❌ NotifyMe 推送失败: {e}")
+
+    # Bark 推送
     if BARK_KEY:
         try:
-            requests.post(f"https://api.day.app/{BARK_KEY}", data={
-                "title": title, "body": body, "group": "洛克王国", "image": image_url, "isArchive": 1
-            }, timeout=10)
+            requests.post(
+                f"https://api.day.app/{BARK_KEY}",
+                data={
+                    "title": title,
+                    "body": body,
+                    "group": "洛克王国",
+                    "image": image_url,
+                    "isArchive": 1
+                },
+                timeout=10
+            )
             print("✅ Bark 推送已发送")
-        except: pass
+        except Exception as e:
+            print(f"❌ Bark 推送失败: {e}")
 
-    # PushPlus 支持，需先设置 PUSHPLUS_TOKEN
-if PUSHPLUS_TOKEN:
-    content = (
-        f"{markdown}\n\n![]({image_url})"
-        if image_url else (markdown if markdown else body)
-    )
-    pushplus_data = {
-        "token": PUSHPLUS_TOKEN,
-        "title": title,
-        "content": content,
-        "template": "markdown"
-    }
-    try:
-        requests.post('http://www.pushplus.plus/send', json=pushplus_data, timeout=10)
-        print("✅ PushPlus 推送已发送")
-    except: pass
+    # PushPlus 推送
+    if PUSHPLUS_TOKEN:
+        content = (
+            f"{markdown}\n\n![]({image_url})" if image_url
+            else (markdown if markdown else body)
+        )
+        pushplus_data = {
+            "token": PUSHPLUS_TOKEN,
+            "title": title,
+            "content": content,
+            "template": "markdown"
+        }
+        try:
+            resp = requests.post(
+                'http://www.pushplus.plus/send',
+                json=pushplus_data,
+                timeout=10
+            )
+            print("✅ PushPlus 推送已发送")
+            # 可选：调试推送结果
+            # print(resp.text)
+        except Exception as e:
+            print(f"❌ PushPlus 推送失败: {e}")
 
 # ================= 5. 主入口 =================
 
