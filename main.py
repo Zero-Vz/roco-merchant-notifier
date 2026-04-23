@@ -10,6 +10,7 @@ ROCOM_API_KEY = os.environ.get("ROCOM_API_KEY")
 IMGBB_KEY = os.environ.get("IMGBB_KEY")
 NOTIFYME_UUID = os.environ.get("NOTIFYME_UUID")
 BARK_KEY = os.environ.get("BARK_KEY")
+PUSHPLUS_TOKEN = os.getenv("PUSHPLUS_TOKEN", "")  # pushplus token
 
 GAME_API_URL = "https://wegame.shallow.ink/api/v1/games/rocom/merchant/info?refresh=true"
 NOTIFYME_SERVER = "https://notifyme-server.wzn556.top/api/send"
@@ -188,6 +189,19 @@ def push_all(title, body, markdown, image_url):
                 "title": title, "body": body, "group": "洛克王国", "image": image_url, "isArchive": 1
             }, timeout=10)
             print("✅ Bark 推送已发送")
+        except: pass
+
+    # PushPlus 支持，需先设置 PUSHPLUS_TOKEN
+    if PUSHPLUS_TOKEN:
+        pushplus_data = {
+            "token": PUSHPLUS_TOKEN,
+            "title": title,
+            "content": markdown if markdown else body,
+            "template": "markdown"
+        }
+        try:
+            requests.post('http://www.pushplus.plus/send', json=pushplus_data, timeout=10)
+            print("✅ PushPlus 推送已发送")
         except: pass
 
 # ================= 5. 主入口 =================
